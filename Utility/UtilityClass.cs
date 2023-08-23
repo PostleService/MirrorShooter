@@ -17,11 +17,13 @@ public static class UtilityClass
     public static Vector3 GetEndPoint(Vector3 aOriginPoint, Vector3 aDirection, float aDistance)
     { return aOriginPoint + (aDirection * aDistance); }
 
+    /// <summary> Rotation relative to the absolute world up </summary>
     public static Vector3 GetDirectionV3(Vector3 aTargetPosition, Vector3 aOriginPoint)
     {
         return GetRotation(aTargetPosition, aOriginPoint) * Vector3.up;
     }
 
+    /// <summary> Rotation relative to the object's up </summary>
     public static Vector3 GetDirectionV3(Vector3 aTargetPosition, Vector3 aOriginPoint, Vector3 aObjectUp)
     {
         return GetRotation(aTargetPosition, aOriginPoint) * aObjectUp;

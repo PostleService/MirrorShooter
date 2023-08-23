@@ -17,16 +17,20 @@ public static class UtilityClass
     public static Vector3 GetEndPoint(Vector3 aOriginPoint, Vector3 aDirection, float aDistance)
     { return aOriginPoint + (aDirection * aDistance); }
 
-    /// <summary> Rotation relative to the absolute world up </summary>
     public static Vector3 GetDirectionV3(Vector3 aTargetPosition, Vector3 aOriginPoint)
     {
         return GetRotation(aTargetPosition, aOriginPoint) * Vector3.up;
     }
 
-    /// <summary> Rotation relative to the object's up </summary>
-    public static Vector3 GetDirectionV3(Vector3 aTargetPosition, Vector3 aOriginPoint, Vector3 aObjectUp)
+    public static Vector3 GetRelativeDirectionV3(Vector3 aTargetPosition, GameObject aOriginObject)
     {
-        return GetRotation(aTargetPosition, aOriginPoint) * aObjectUp;
+        GameObject RotatableEntity = new GameObject("RotatableEntity");
+        RotatableEntity.transform.parent = aOriginObject.transform;
+        RotatableEntity.transform.rotation = GetRotation(aTargetPosition, aOriginObject.transform.position);
+        Vector3 relativeRotation = RotatableEntity.transform.localRotation * Vector3.up;
+        GameObject.Destroy(RotatableEntity);
+
+        return relativeRotation;
     }
 
     public static float GetAngle(Vector3 aTargetPosition, Vector3 aOriginalPoint)

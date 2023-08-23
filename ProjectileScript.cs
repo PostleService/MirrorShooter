@@ -30,7 +30,6 @@ public class ProjectileScript : MonoBehaviour
         {
             if (aSuccessful == true)
             {
-
             }
             else
             { DestroyEntity(); }

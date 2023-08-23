@@ -22,10 +22,20 @@ public static class UtilityClass
         return GetRotation(aTargetPosition, aOriginPoint) * Vector3.up;
     }
 
+    public static Vector3 GetDirectionV3(Vector3 aTargetPosition, Vector3 aOriginPoint, Vector3 aObjectUp)
+    {
+        return GetRotation(aTargetPosition, aOriginPoint) * aObjectUp;
+    }
+
     public static float GetAngle(Vector3 aTargetPosition, Vector3 aOriginalPoint)
     {
         Vector3 direction = (aTargetPosition - aOriginalPoint);
         return Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+    }
+
+    public static float GetAngleOfCollision(Collision2D aCollision)
+    {
+        return Vector3.Angle(aCollision.gameObject.GetComponent<Rigidbody2D>().velocity.normalized, aCollision.contacts[0].normal);
     }
 
     public static Quaternion GetRotation(Vector3 aTargetPosition, Vector3 aOriginPoint)

@@ -8,18 +8,23 @@ public class PortalManager : MonoBehaviour
     private ArenaManager _arenaManager;
 
     [Header("Portal")]
+    [Tooltip("Exists as a reference for collision bounds")] 
     public GameObject MasterPortalBlueprint;
     public LayerMask Layers_BoxCast;
     public LayerMask TeleportObjectsOfLayers;
 
-    private Bounds PortalBounds;
+    [Header("Portal Restrictions")]
+    [Tooltip("Absolute value of 1 is fully to the right or left, 0 - approaching front or back")] 
+    [Range(0, 1)] public float MaxSideAngle = .9f;
 
+    [Header("Portal Prefabs")]
     public GameObject[] Portals = new GameObject[2];
     public GameObject[] PortalBlueprints = new GameObject[2];
 
     private List<GameObject> _currentPortals = new List<GameObject>();
     private List<GameObject> _currentPortalBlueprints = new List<GameObject>();
 
+    private Bounds PortalBounds;
     private bool _portalSpawnAllowed = false;
     private Vector3 _tempPortalPosition = Vector3.zero;
     private Quaternion _tempPortalRotation = new Quaternion();
@@ -116,8 +121,12 @@ public class PortalManager : MonoBehaviour
             Vector3 rotatedPosition = UtilityClass.ReturnRotatedPosition(aCollision.gameObject.transform.position, aRequestingPortalObj.transform.position, 180) + _arenaManager.OffsetOfOpositeArena(aArena);
             Vector2 newVelocity = aCollision.gameObject.GetComponent<Rigidbody2D>().velocity * -1;
 
+            // float angleOfCollision = UtilityClass.GetAngleOfCollision(aCollision);
+            
             if (UtilityClass.IsPointInsideCollider(rotatedPosition, Vector3.up, Layers_BoxCast) == false &&
-                Physics2D.OverlapCircle(rotatedPosition, aCollision.gameObject.GetComponent<CircleCollider2D>().bounds.size.y / 2, Layers_BoxCast) == null)
+                Physics2D.OverlapCircle(rotatedPosition, aCollision.gameObject.GetComponent<CircleCollider2D>().bounds.size.y / 2, Layers_BoxCast) == null &&
+                Mathf.Abs((UtilityClass.GetDirectionV3(aCollision.transform.position, aRequestingPortalObj.transform.position, aRequestingPortalObj.transform.up).x)) < MaxSideAngle
+                )
             { 
                 aCollision.transform.position = rotatedPosition;
                 aCollision.gameObject.GetComponent<Rigidbody2D>().velocity = newVelocity;

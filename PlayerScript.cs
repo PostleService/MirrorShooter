@@ -33,6 +33,7 @@ public class PlayerScript : MonoBehaviour
         PlayerControls.OnShootButton += SpawnProjectile;
         PlayerControls.OnPortalButton += PortalPlacementDirectives;
         TeleportationEntityListener.OnTeleportationInstance += ReactToTeleportationEvent;
+        CollisionEntityListener.OnCollisionInstance += ReactToCollisionEvent;
     }
 
     private void OnDisable()
@@ -41,6 +42,7 @@ public class PlayerScript : MonoBehaviour
         PlayerControls.OnShootButton -= SpawnProjectile;
         PlayerControls.OnPortalButton -= PortalPlacementDirectives;
         TeleportationEntityListener.OnTeleportationInstance -= ReactToTeleportationEvent;
+        CollisionEntityListener.OnCollisionInstance -= ReactToCollisionEvent;
     }
 
     private void Start()
@@ -49,7 +51,7 @@ public class PlayerScript : MonoBehaviour
         _portalManager = GameObject.Find("PortalManager").GetComponent<PortalManager>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         RotateTowardsMouse();
         LimitMovementSpeed();
@@ -68,7 +70,7 @@ public class PlayerScript : MonoBehaviour
 
     private void MovePlayer(Vector2 aDirection)
     {
-        _rigidbody2D.AddForce(aDirection * PlayerMovementSpeed, ForceMode2D.Force);
+        _rigidbody2D.AddForce(aDirection * PlayerMovementSpeed, ForceMode2D.Impulse);
     }
 
     private void RotateTowardsMouse()
@@ -137,20 +139,30 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    #endregion PortalDirectives
+
+    #region ReactionsToEvents
+
     public void ReactToTeleportationEvent(bool aSuccessful, TeleportationEntityListener aTPListener)
     {
         if (aTPListener == gameObject.GetComponent<TeleportationEntityListener>())
         {
-            if (aSuccessful == true) 
+            if (aSuccessful == true)
             { OnPlayerTP?.Invoke(); }
             else
             { }
         }
     }
 
-    #endregion PortalDirectives
+    public void ReactToCollisionEvent(Collision2D aCollision, CollisionEntityListener aCollisionEntityListener)
+    {
+        if (aCollisionEntityListener == gameObject.GetComponent<CollisionEntityListener>())
+        {
 
-    #region Casts
+        }
+    }
+
+    #endregion ReactionsToEvents
 
     private Vector3 RayCastToObstacle()
     {
@@ -161,6 +173,6 @@ public class PlayerScript : MonoBehaviour
         else { return ((UtilityClass.GetDirectionV3(GunBarrel.transform.position, transform.position) * MaxPortalSpawnDistance) + transform.position); }
     }
 
-    #endregion Casts
+
 
 }

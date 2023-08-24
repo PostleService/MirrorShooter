@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
 {
+    public LayerMask DestroyOnContactWith;
+
     private void OnEnable()
     {
         TeleportationEntityListener.OnTeleportationInstance += ReactToTeleportationEvent;
+        CollisionEntityListener.OnCollisionInstance += ReactToCollisionEvent;
     }
 
     private void OnDisable()
     {
         TeleportationEntityListener.OnTeleportationInstance -= ReactToTeleportationEvent;
+        CollisionEntityListener.OnCollisionInstance -= ReactToCollisionEvent;
     }
 
     private void Update()
@@ -32,6 +36,15 @@ public class ProjectileScript : MonoBehaviour
             {
             }
             else
+            { DestroyEntity(); }
+        }
+    }
+
+    public void ReactToCollisionEvent(Collision2D aCollision, CollisionEntityListener aCollisionEntityListener)
+    {
+        if (aCollisionEntityListener == gameObject.GetComponent<CollisionEntityListener>())
+        {
+            if (UtilityClass.IsLayerInLayerMask(aCollision.gameObject.layer, DestroyOnContactWith))
             { DestroyEntity(); }
         }
     }

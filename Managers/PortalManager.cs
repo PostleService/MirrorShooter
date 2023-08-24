@@ -121,8 +121,6 @@ public class PortalManager : MonoBehaviour
             Vector3 rotatedPosition = UtilityClass.ReturnRotatedPosition(aCollision.gameObject.transform.position, aRequestingPortalObj.transform.position, 180) + _arenaManager.OffsetOfOpositeArena(aArena);
             Vector2 newVelocity = aCollision.gameObject.GetComponent<Rigidbody2D>().velocity * -1;
 
-            Debug.LogWarning(Mathf.Abs(UtilityClass.GetRelativeDirectionV3(aCollision.transform.position, aRequestingPortalObj).x));
-
             if (UtilityClass.IsPointInsideCollider(rotatedPosition, Vector3.up, Layers_BoxCast) == false &&
                 Physics2D.OverlapCircle(rotatedPosition, aCollision.gameObject.GetComponent<CircleCollider2D>().bounds.size.y / 2, Layers_BoxCast) == null &&
                 Mathf.Abs(UtilityClass.GetRelativeDirectionV3(aCollision.transform.position, aRequestingPortalObj).x) < MaxSideAngle

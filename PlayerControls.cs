@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerControls : MonoBehaviour
@@ -27,6 +28,10 @@ public class PlayerControls : MonoBehaviour
 
         _inputControl.PlayerControls.PlayerPortalPlacement.started += value => ReceivePortalPlacementDirectives(true);
         _inputControl.PlayerControls.PlayerPortalPlacement.canceled += value => ReceivePortalPlacementDirectives(false);
+
+        // temporarily in player controls
+        _inputControl.PlayerControls.RestartLevel.started += value => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        _inputControl.PlayerControls.QuitGame.started += value => Application.Quit();
     }
 
     private void OnDisable()
@@ -37,6 +42,10 @@ public class PlayerControls : MonoBehaviour
 
         _inputControl.PlayerControls.PlayerPortalPlacement.started -= value => ReceivePortalPlacementDirectives(true);
         _inputControl.PlayerControls.PlayerPortalPlacement.canceled -= value => ReceivePortalPlacementDirectives(false);
+
+        // temporarily in player controls
+        _inputControl.PlayerControls.RestartLevel.started -= value => SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
+        _inputControl.PlayerControls.QuitGame.started -= value => Application.Quit();
     }
 
     private void ReadMovementDirection(InputAction.CallbackContext aCallbackContext)

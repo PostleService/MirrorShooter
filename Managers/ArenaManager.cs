@@ -15,12 +15,10 @@ public class ArenaManager : MonoBehaviour
     private void OnEnable()
     {
         PlayerScript.OnPlayerTP += ChangeCurrentArena;
-        PlayerScript.OnPlayerTP += ChangeMainCamera;
     }
     private void OnDisable()
     {
         PlayerScript.OnPlayerTP -= ChangeCurrentArena;
-        PlayerScript.OnPlayerTP -= ChangeMainCamera;
     }
 
     private void Awake()
@@ -44,25 +42,16 @@ public class ArenaManager : MonoBehaviour
 
     public int GetCurrentArena() { return CurrentArena; }
 
-    public void ChangeMainCamera() 
-    {
-        Camera[] Cameras = GameObject.FindObjectsOfType<Camera>();
-        foreach (Camera cam in Cameras)
-        {
-            if (cam.tag == "SecondaryCamera") { cam.tag = "MainCamera"; }
-            else { cam.tag = "SecondaryCamera"; }
-        }
-    }
-
-    public int GetOppositeArena() 
-    {
-        if (CurrentArena == 1) return 2;
-        else return 1;
-    }
-
     public void ChangeCurrentArena()
     {
         if (CurrentArena == 1) CurrentArena = 2;
         else CurrentArena = 1;
     }
+
+    public int GetOppositeArena()
+    {
+        if (CurrentArena == 1) return 2;
+        else return 1;
+    }
+
 }

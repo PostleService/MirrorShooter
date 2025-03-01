@@ -19,8 +19,6 @@ public class DoorSwitchScript : MonoBehaviour
 
     public void ReactToCollisionEvent(Collision2D aCollision, CollisionEntityListener aCollisionEntityListener)
     {
-        Debug.LogWarning("interaction");
-
         if (aCollisionEntityListener == gameObject.GetComponent<CollisionEntityListener>())
         {
             if (UtilityClass.IsLayerInLayerMask(aCollision.gameObject.layer, ReactToLayers))
